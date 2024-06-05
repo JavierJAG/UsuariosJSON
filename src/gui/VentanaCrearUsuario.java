@@ -3,6 +3,7 @@ package gui;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -104,13 +105,22 @@ public class VentanaCrearUsuario extends JFrame implements ActionListener {
                             textoContraseña.getText() != null && !textoContraseña.getText().isBlank() &&
                             textoEdad.getText() != null && !textoEdad.getText().isBlank() &&
                             textoCorreo.getText() != null && !textoCorreo.getText().isBlank()) {
-                app = new AplicacionUsuarios();
-                app.crearUsuario(textoNombre.getText(), textoContraseña.getText(), textoEdad.getText(), textoCorreo.getText());
-                this.dispose();
-                VentanaInicioSesion inicio = new VentanaInicioSesion(new AplicacionUsuarios());
-                inicio.setVisible(true);
-            }else {
-                JOptionPane.showMessageDialog(this,"No puede haber campos en blanco");
+                try {
+                    int edadCorrecta = Integer.parseInt(textoEdad.getText());
+                    if (edadCorrecta <= 0) {
+                        JOptionPane.showMessageDialog(this, "La edad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        app = new AplicacionUsuarios();
+                        app.crearUsuario(textoNombre.getText(), textoContraseña.getText(), textoEdad.getText(), textoCorreo.getText());
+                        this.dispose();
+                        VentanaInicioSesion inicio = new VentanaInicioSesion(new AplicacionUsuarios());
+                        inicio.setVisible(true);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "La edad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No puede haber campos en blanco");
             }
         } else if (e.getSource() == btnCancelar) {
             this.dispose();
